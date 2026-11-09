@@ -2,7 +2,10 @@ import SwiftUI
 
 struct FeedView: View {
     @Environment(ReaderStore.self) private var store
-    @State private var tab: FeedTab = .foryou
+    @Environment(\.selectMainTab) private var selectTab
+    let mode: MainTab
+    @Binding var feedSort: FeedTab
+    private var tab: FeedTab { mode == .saved ? .saved : mode == .queue ? .queue : feedSort }
     @State private var topic: String?
     @State private var welcome = false
     private var all: [Paper] { store.items(tab) }
@@ -32,7 +35,7 @@ struct FeedView: View {
                         Text("You're up to date.").font(Design.font(13)).foregroundStyle(Design.muted).padding(.vertical, 40)
                     }
                 }
-            }.scrollIndicators(.hidden).background(Design.background)
+            }.scrollIndicators(.hidden).background(Design.background).contentMargins(.bottom, 110, for: .scrollContent)
         }
         .background(Design.background)
         .toolbar(.hidden, for: .navigationBar)
@@ -40,45 +43,32 @@ struct FeedView: View {
         .overlay { if welcome { WelcomeView { welcome = false; store.welcomed = true } } }
     }
     private var header: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Wordmark()
-                Spacer()
-                FetchControl(iconOnly: true)
-                NavigationLink(value: Destination.settings) { Glyph(kind: .settings).foregroundStyle(Design.muted).padding(.leading, 20) }.accessibilityLabel("Settings")
-            }.padding(.horizontal, 16).frame(height: 48)
-            HStack(spacing: 0) {
-                ForEach(FeedTab.allCases, id: \.self) { item in
-                    Button { tab = item; if let topic, !topics.contains(topic) { self.topic = nil } } label: {
-                        Text(item.rawValue).font(Design.font(14, tab == item ? .semibold : .regular))
-                            .foregroundStyle(tab == item ? Design.foreground : Design.muted)
-                            .frame(maxWidth: .infinity).frame(height: 44)
-                            .overlay(alignment: .bottom) { if tab == item { Capsule().fill(Design.accent).frame(width: 48, height: 4) } }
-                    }.accessibilityAddTraits(tab == item ? .isSelected : [])
+        HStack {
+            if mode == .feed {
+                Menu {
+                    ForEach([FeedTab.foryou, .latest], id: \.self) { item in
+                        Button { feedSort = item } label: {
+                            if feedSort == item { Label(item.rawValue, systemImage: "checkmark") }
+                            else { Text(item.rawValue) }
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 6) { Text(feedSort.rawValue).font(Design.font(16, .semibold)); Image(systemName: "chevron.down").font(.system(size: 10, weight: .semibold)) }
+                        .frame(height: 40)
+                }.accessibilityLabel("Feed order, \(feedSort.rawValue)")
+            } else { Text(mode.rawValue).font(Design.font(20, .bold)) }
+            Spacer()
+            if topics.count > 1 || topic != nil {
+                Menu {
+                    Button { topic = nil } label: {
+                        if topic == nil { Label("All topics", systemImage: "checkmark") } else { Text("All topics") }
+                    }
+                    ForEach(topics, id: \.self) { t in Button(t) { topic = t } }
+                } label: {
+                    HStack(spacing: 5) { Text(topic ?? "All topics"); Image(systemName: "chevron.down").font(.system(size: 9, weight: .medium)) }.font(Design.font(13)).foregroundStyle(Design.muted).frame(height: 40)
                 }
             }
-            Rule()
-            if topics.count > 1 || topic != nil {
-                ScrollView(.horizontal) {
-                    HStack(spacing: 8) {
-                        chip("All", count: all.count, selection: nil)
-                        ForEach(topics, id: \.self) { t in chip(t, count: all.filter { $0.topic == t }.count, selection: t) }
-                    }.padding(.horizontal, 16).padding(.vertical, 8)
-                }.scrollIndicators(.hidden)
-                Rule()
-            }
-        }.background(Design.background)
-    }
-    private func chip(_ name: String, count: Int, selection: String?) -> some View {
-        Button { topic = selection } label: {
-            HStack(spacing: 6) {
-                Text(name)
-                Text("\(count)").foregroundStyle(topic == selection ? Design.background.opacity(0.7) : Design.muted)
-            }.font(Design.font(13)).padding(.horizontal, 12).padding(.vertical, 5)
-                .foregroundStyle(topic == selection ? Design.background : Design.foreground)
-                .background(topic == selection ? Design.foreground : Design.background, in: Capsule())
-                .overlay(Capsule().stroke(topic == selection ? Design.foreground : Design.line, lineWidth: 1))
-        }
+        }.padding(.horizontal, 16).frame(height: 44).foregroundStyle(Design.foreground).background(Design.background)
     }
     @ViewBuilder private var randomPaper: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -119,7 +109,7 @@ struct FeedView: View {
             } else {
                 Text("Add an API key to get started").font(Design.font(17, .semibold))
                 Text("Threads are written with your own Anthropic, OpenAI or OpenRouter key, so your feed stays empty until you add one.").font(Design.font(14)).foregroundStyle(Design.muted)
-                NavigationLink("Add a key in Settings", value: Destination.settings).buttonStyle(WebButtonStyle(primary: true, compact: true)).padding(.top, 14)
+                Button("Add a key in Settings") { selectTab(.settings) }.buttonStyle(WebButtonStyle(primary: true, compact: true)).padding(.top, 14)
             }
         }.multilineTextAlignment(.center).padding(.horizontal, 24).padding(.vertical, 64).frame(maxWidth: .infinity)
     }

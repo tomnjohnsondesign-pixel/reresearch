@@ -1,6 +1,6 @@
 # reresearch iPhone design prototype
 
-A native SwiftUI baseline of the existing web app, intended for visual design exploration with Tom and review by Mike. The initial layout preserves the current web header, top tabs, topic chips, feed cards, thread structure, Settings sections, login, welcome, tour, and Privacy page. The web implementation remains the reference.
+A native SwiftUI prototype for visual design exploration with Tom and review by Mike. The original web-like native baseline is preserved locally in commit `8c60fd7`. The current design pass uses a light interface, centred wordmark, menu and search in the top corners, and a floating Liquid Glass tray for Feed, Saved, Queue, and Settings. Feed order and topic filtering live in compact menus on the feed. The tray and selected item are full capsules, with equal side/bottom outer insets and an even four-point inner inset.
 
 Open `Reresearch.xcodeproj`, select the shared `reresearch` scheme, and run on an iPhone simulator. The initial deployment target is iOS 18. The project has no external package dependencies and no signing team configured. Routine builds run locally on the Mac; there are no GitHub Actions workflows.
 

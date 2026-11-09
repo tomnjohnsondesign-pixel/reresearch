@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SettingsView: View {
+    var showHeader = true
     static let levels = [
         ("Crayons", "Explain it like I'm five"),
         ("Pub quiz", "Curious, no science background needed"),
@@ -22,7 +23,8 @@ struct SettingsView: View {
     private func binding<T>(_ key: ReferenceWritableKeyPath<ReaderStore, T>) -> Binding<T> { Binding(get: { store[keyPath: key] }, set: { store[keyPath: key] = $0; store.save(); store.message("Saved") }) }
     var body: some View {
         VStack(spacing: 0) {
-            BackHeader(title: "Settings", fetching: true)
+            if showHeader { BackHeader(title: "Settings", fetching: true) }
+            else { HStack { Text("Settings").font(Design.font(22, .bold)); Spacer() }.padding(.horizontal, 16).frame(height: 48) }
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(spacing: 0) {
@@ -50,7 +52,7 @@ struct SettingsView: View {
                                 .overlay { NavigationLink(value: Destination.privacy) { Color.clear }.accessibilityLabel("privacy notice") }
                         }
                     }
-                }.scrollIndicators(.hidden).scrollDismissesKeyboard(.interactively)
+                }.scrollIndicators(.hidden).scrollDismissesKeyboard(.interactively).contentMargins(.bottom, showHeader ? 0 : 110, for: .scrollContent)
                     .onChange(of: tour) { _, step in if let step { proxy.scrollTo(steps[step].spot, anchor: .top) } }
             }
         }.background(Design.background).toolbar(.hidden, for: .navigationBar)
