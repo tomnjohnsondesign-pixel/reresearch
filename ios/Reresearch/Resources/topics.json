@@ -1,0 +1,441 @@
+[
+  {
+    "name": "Physics",
+    "options": [
+      {
+        "id": "hep-ex",
+        "label": "High energy physics: experiment",
+        "source": "hep-ex",
+        "short": "hep-ex"
+      },
+      {
+        "id": "hep-ph",
+        "label": "High energy physics: phenomenology",
+        "source": "hep-ph",
+        "short": "hep-ph"
+      },
+      {
+        "id": "hep-th",
+        "label": "High energy physics: theory",
+        "source": "hep-th",
+        "short": "hep-th"
+      },
+      {
+        "id": "hep-lat",
+        "label": "Lattice QCD",
+        "source": "hep-lat",
+        "short": "hep-lat"
+      },
+      {
+        "id": "quant-ph",
+        "label": "Quantum physics",
+        "source": "quant-ph",
+        "short": "quant-ph"
+      },
+      {
+        "id": "physics.plasm-ph",
+        "label": "Plasma physics (fusion)",
+        "source": "physics.plasm-ph",
+        "short": "plasm-ph"
+      },
+      {
+        "id": "nucl-ex",
+        "label": "Nuclear experiment",
+        "source": "nucl-ex",
+        "short": "nucl-ex"
+      },
+      {
+        "id": "nucl-th",
+        "label": "Nuclear theory",
+        "source": "nucl-th",
+        "short": "nucl-th"
+      },
+      {
+        "id": "astro-ph.CO",
+        "label": "Cosmology",
+        "source": "astro-ph.CO",
+        "short": "astro-CO"
+      },
+      {
+        "id": "astro-ph.HE",
+        "label": "High energy astrophysics",
+        "source": "astro-ph.HE",
+        "short": "astro-HE"
+      },
+      {
+        "id": "gr-qc",
+        "label": "General relativity & quantum cosmology",
+        "source": "gr-qc",
+        "short": "gr-qc"
+      },
+      {
+        "id": "cond-mat.supr-con",
+        "label": "Superconductivity",
+        "source": "cond-mat.supr-con",
+        "short": "cond-mat.supr-con"
+      },
+      {
+        "id": "cond-mat.mes-hall",
+        "label": "Mesoscale & nanoscale physics",
+        "source": "cond-mat.mes-hall",
+        "short": "cond-mat.mes-hall"
+      },
+      {
+        "id": "physics.atom-ph",
+        "label": "Atomic physics",
+        "source": "physics.atom-ph",
+        "short": "atom-ph"
+      },
+      {
+        "id": "physics.optics",
+        "label": "Optics",
+        "source": "physics.optics",
+        "short": "optics"
+      },
+      {
+        "id": "physics.acc-ph",
+        "label": "Accelerator physics",
+        "source": "physics.acc-ph",
+        "short": "acc-ph"
+      },
+      {
+        "id": "physics.ins-det",
+        "label": "Instrumentation & detectors",
+        "source": "physics.ins-det",
+        "short": "ins-det"
+      }
+    ]
+  },
+  {
+    "name": "AI",
+    "options": [
+      {
+        "id": "cs.AI",
+        "label": "Artificial intelligence",
+        "source": "cs.AI",
+        "short": "cs.AI"
+      },
+      {
+        "id": "cs.LG",
+        "label": "Machine learning",
+        "source": "cs.LG",
+        "short": "cs.LG"
+      },
+      {
+        "id": "stat.ML",
+        "label": "Machine learning (statistics)",
+        "source": "stat.ML",
+        "short": "stat.ML"
+      },
+      {
+        "id": "cs.CL",
+        "label": "Language models & NLP",
+        "source": "cs.CL",
+        "short": "cs.CL"
+      },
+      {
+        "id": "cs.CV",
+        "label": "Computer vision",
+        "source": "cs.CV",
+        "short": "cs.CV"
+      },
+      {
+        "id": "cs.RO",
+        "label": "Robotics",
+        "source": "cs.RO",
+        "short": "cs.RO"
+      },
+      {
+        "id": "cs.MA",
+        "label": "Multi-agent systems",
+        "source": "cs.MA",
+        "short": "cs.MA"
+      },
+      {
+        "id": "cs.NE",
+        "label": "Neural & evolutionary computing",
+        "source": "cs.NE",
+        "short": "cs.NE"
+      }
+    ]
+  },
+  {
+    "name": "Chemistry",
+    "options": [
+      {
+        "id": "physics.chem-ph",
+        "label": "Chemical physics",
+        "source": "physics.chem-ph",
+        "short": "chem-ph"
+      },
+      {
+        "id": "openalex:1605",
+        "label": "Organic chemistry",
+        "source": "journals",
+        "short": "organic"
+      },
+      {
+        "id": "openalex:1604",
+        "label": "Inorganic chemistry",
+        "source": "journals",
+        "short": "inorganic"
+      },
+      {
+        "id": "openalex:1606",
+        "label": "Physical & theoretical chemistry",
+        "source": "journals",
+        "short": "physical"
+      },
+      {
+        "id": "openalex:1602",
+        "label": "Analytical chemistry",
+        "source": "journals",
+        "short": "analytical"
+      },
+      {
+        "id": "openalex:1603",
+        "label": "Electrochemistry",
+        "source": "journals",
+        "short": "electrochemistry"
+      },
+      {
+        "id": "openalex:1607",
+        "label": "Spectroscopy",
+        "source": "journals",
+        "short": "spectroscopy"
+      },
+      {
+        "id": "openalex:2505",
+        "label": "Materials chemistry",
+        "source": "journals",
+        "short": "materials"
+      }
+    ]
+  },
+  {
+    "name": "Biology",
+    "options": [
+      {
+        "id": "biorxiv:animal behavior and cognition",
+        "label": "Animal behaviour & cognition",
+        "source": "bioRxiv",
+        "short": "animal behavior and cognition"
+      },
+      {
+        "id": "biorxiv:biochemistry",
+        "label": "Biochemistry",
+        "source": "bioRxiv",
+        "short": "biochemistry"
+      },
+      {
+        "id": "biorxiv:bioengineering",
+        "label": "Bioengineering",
+        "source": "bioRxiv",
+        "short": "bioengineering"
+      },
+      {
+        "id": "biorxiv:bioinformatics",
+        "label": "Bioinformatics",
+        "source": "bioRxiv",
+        "short": "bioinformatics"
+      },
+      {
+        "id": "biorxiv:biophysics",
+        "label": "Biophysics",
+        "source": "bioRxiv",
+        "short": "biophysics"
+      },
+      {
+        "id": "biorxiv:cancer biology",
+        "label": "Cancer biology",
+        "source": "bioRxiv",
+        "short": "cancer biology"
+      },
+      {
+        "id": "biorxiv:cell biology",
+        "label": "Cell biology",
+        "source": "bioRxiv",
+        "short": "cell biology"
+      },
+      {
+        "id": "biorxiv:developmental biology",
+        "label": "Developmental biology",
+        "source": "bioRxiv",
+        "short": "developmental biology"
+      },
+      {
+        "id": "biorxiv:ecology",
+        "label": "Ecology",
+        "source": "bioRxiv",
+        "short": "ecology"
+      },
+      {
+        "id": "biorxiv:evolutionary biology",
+        "label": "Evolutionary biology",
+        "source": "bioRxiv",
+        "short": "evolutionary biology"
+      },
+      {
+        "id": "biorxiv:genetics",
+        "label": "Genetics",
+        "source": "bioRxiv",
+        "short": "genetics"
+      },
+      {
+        "id": "biorxiv:genomics",
+        "label": "Genomics",
+        "source": "bioRxiv",
+        "short": "genomics"
+      },
+      {
+        "id": "biorxiv:immunology",
+        "label": "Immunology",
+        "source": "bioRxiv",
+        "short": "immunology"
+      },
+      {
+        "id": "biorxiv:microbiology",
+        "label": "Microbiology",
+        "source": "bioRxiv",
+        "short": "microbiology"
+      },
+      {
+        "id": "biorxiv:molecular biology",
+        "label": "Molecular biology",
+        "source": "bioRxiv",
+        "short": "molecular biology"
+      },
+      {
+        "id": "biorxiv:neuroscience",
+        "label": "Neuroscience",
+        "source": "bioRxiv",
+        "short": "neuroscience"
+      },
+      {
+        "id": "biorxiv:paleontology",
+        "label": "Palaeontology",
+        "source": "bioRxiv",
+        "short": "paleontology"
+      },
+      {
+        "id": "biorxiv:pathology",
+        "label": "Pathology",
+        "source": "bioRxiv",
+        "short": "pathology"
+      },
+      {
+        "id": "biorxiv:pharmacology and toxicology",
+        "label": "Pharmacology & toxicology",
+        "source": "bioRxiv",
+        "short": "pharmacology and toxicology"
+      },
+      {
+        "id": "biorxiv:physiology",
+        "label": "Physiology",
+        "source": "bioRxiv",
+        "short": "physiology"
+      },
+      {
+        "id": "biorxiv:plant biology",
+        "label": "Plant biology",
+        "source": "bioRxiv",
+        "short": "plant biology"
+      },
+      {
+        "id": "biorxiv:scientific communication and education",
+        "label": "Science communication & education",
+        "source": "bioRxiv",
+        "short": "scientific communication and education"
+      },
+      {
+        "id": "biorxiv:synthetic biology",
+        "label": "Synthetic biology",
+        "source": "bioRxiv",
+        "short": "synthetic biology"
+      },
+      {
+        "id": "biorxiv:systems biology",
+        "label": "Systems biology",
+        "source": "bioRxiv",
+        "short": "systems biology"
+      },
+      {
+        "id": "biorxiv:zoology",
+        "label": "Zoology",
+        "source": "bioRxiv",
+        "short": "zoology"
+      }
+    ]
+  },
+  {
+    "name": "Quantitative biology",
+    "options": [
+      {
+        "id": "q-bio.BM",
+        "label": "Biomolecules",
+        "source": "q-bio.BM",
+        "short": "q-bio.BM"
+      },
+      {
+        "id": "q-bio.CB",
+        "label": "Cell behaviour",
+        "source": "q-bio.CB",
+        "short": "q-bio.CB"
+      },
+      {
+        "id": "q-bio.GN",
+        "label": "Genomics",
+        "source": "q-bio.GN",
+        "short": "q-bio.GN"
+      },
+      {
+        "id": "q-bio.MN",
+        "label": "Molecular networks",
+        "source": "q-bio.MN",
+        "short": "q-bio.MN"
+      },
+      {
+        "id": "q-bio.NC",
+        "label": "Neurons & cognition",
+        "source": "q-bio.NC",
+        "short": "q-bio.NC"
+      },
+      {
+        "id": "q-bio.PE",
+        "label": "Populations & evolution",
+        "source": "q-bio.PE",
+        "short": "q-bio.PE"
+      },
+      {
+        "id": "q-bio.QM",
+        "label": "Quantitative methods",
+        "source": "q-bio.QM",
+        "short": "q-bio.QM"
+      },
+      {
+        "id": "q-bio.SC",
+        "label": "Subcellular processes",
+        "source": "q-bio.SC",
+        "short": "q-bio.SC"
+      },
+      {
+        "id": "q-bio.TO",
+        "label": "Tissues & organs",
+        "source": "q-bio.TO",
+        "short": "q-bio.TO"
+      },
+      {
+        "id": "q-bio.OT",
+        "label": "Other quantitative biology",
+        "source": "q-bio.OT",
+        "short": "q-bio.OT"
+      },
+      {
+        "id": "physics.bio-ph",
+        "label": "Biological physics",
+        "source": "physics.bio-ph",
+        "short": "bio-ph"
+      }
+    ]
+  }
+]
