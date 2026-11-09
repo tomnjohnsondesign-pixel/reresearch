@@ -13,7 +13,7 @@ struct ThreadView: View {
     private var levelName: String { SettingsView.levels[max(0, min(5, level - 1))].0 }
     var body: some View {
         VStack(spacing: 0) {
-            BackHeader(title: "Thread")
+            BackHeader(title: "Post")
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(spacing: 12) {
@@ -22,8 +22,10 @@ struct ThreadView: View {
                             Text(current.authorLine).font(Design.font(14, .semibold)).lineLimit(1)
                             Text("\(categoryLabel) · 9 November 2026").font(Design.font(14)).foregroundStyle(Design.muted)
                         }
-                    }.padding(.horizontal, 16).padding(.top, 12)
-                    Text(isReady ? (current.headline ?? current.title) : current.title).font(Design.font(isReady ? 21 : 19, .bold)).lineSpacing(1).padding(.horizontal, 16).padding(.top, 12)
+                        Spacer(minLength: 8)
+                        PostOptionsMenu(paper: current)
+                    }.padding(.horizontal, Design.pageInset).padding(.top, 12)
+                    Text(isReady ? (current.headline ?? current.title) : current.title).font(Design.font(isReady ? 21 : 19, .bold)).lineSpacing(1).padding(.horizontal, Design.pageInset).padding(.top, 12)
                     if isReady { threadBody }
                     else { pendingBody }
                 }
@@ -55,26 +57,26 @@ struct ThreadView: View {
                             Text(number.label).font(Design.font(12.5)).foregroundStyle(Design.muted)
                         }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 12).padding(.vertical, 10).background(Design.raised, in: RoundedRectangle(cornerRadius: 12))
                     }
-                }.padding(.horizontal, 16)
+                }.padding(.horizontal, Design.pageInset)
             }
             VStack(alignment: .leading, spacing: 3) {
                 eyebrow("TL;DR")
                 BodyText(text: current.takeaway ?? "")
-            }.padding(12).frame(maxWidth: .infinity, alignment: .leading).overlay(RoundedRectangle(cornerRadius: 12).stroke(Design.line)).padding(.horizontal, 16).padding(.top, 16)
+            }.padding(12).frame(maxWidth: .infinity, alignment: .leading).overlay(RoundedRectangle(cornerRadius: 12).stroke(Design.line)).padding(.horizontal, Design.pageInset).padding(.top, 16)
             FlowLayout(spacing: 6) {
                 ForEach(current.tags, id: \.self) { tag in Text(tag).font(Design.font(12.5)).foregroundStyle(Design.accent).padding(.horizontal, 10).padding(.vertical, 5).background(Design.soft, in: Capsule()) }
                 Text("undergraduate").font(Design.font(12.5)).foregroundStyle(Design.muted).padding(.horizontal, 10).padding(.vertical, 5).background(Design.raised, in: Capsule())
                 Text("experimental").font(Design.font(12.5)).foregroundStyle(Design.muted).padding(.horizontal, 10).padding(.vertical, 5).background(Design.raised, in: Capsule())
-            }.padding(.horizontal, 16).padding(.top, 12)
-            ActionBar(paper: current).padding(.horizontal, 16).padding(.vertical, 10)
+            }.padding(.horizontal, Design.pageInset).padding(.top, 12)
+            ActionBar(paper: current, showsDiscussion: false).padding(.horizontal, Design.pageInset).padding(.vertical, 10)
             if (store.liked.contains(paper.id) || store.saved.contains(paper.id)) && !store.selectedCategories.contains(paper.category) {
                 HStack {
                     Text("Want more like this?").font(Design.font(13)).foregroundStyle(Design.muted)
                     Button("Add \(categoryLabel) to my topics") { store.selectedCategories.insert(paper.category); store.save() }.font(Design.font(13, .medium)).foregroundStyle(Design.accent)
-                }.padding(.horizontal, 16).padding(.bottom, 12)
+                }.padding(.horizontal, Design.pageInset).padding(.bottom, 12)
             }
-            Rule().padding(.horizontal, 16)
-            credits.padding(16)
+            Rule().padding(.horizontal, Design.pageInset)
+            credits.padding(.horizontal, Design.pageInset).padding(.vertical, 16)
         }
     }
     private func threadPost(label: String?, text: String, last: Bool) -> some View {
@@ -87,7 +89,7 @@ struct ThreadView: View {
                 if let label { eyebrow(label) }
                 BodyText(text: text, size: label == nil ? 17 : 15.5)
             }.padding(.bottom, 20)
-        }.padding(.horizontal, 16).fixedSize(horizontal: false, vertical: true)
+        }.padding(.horizontal, Design.pageInset).fixedSize(horizontal: false, vertical: true)
     }
     private var pendingBody: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -99,7 +101,7 @@ struct ThreadView: View {
             }
             BodyText(text: "We investigate how changes in experimental conditions affect the reliability of measurements and the conclusions drawn from them. By comparing observations across controlled settings, we identify the main sources of variation and discuss the limits of the resulting estimates.", size: 14)
             paperLinks
-        }.padding(16)
+        }.padding(.horizontal, Design.pageInset).padding(.vertical, 16)
     }
     private var credits: some View {
         VStack(alignment: .leading, spacing: 12) {

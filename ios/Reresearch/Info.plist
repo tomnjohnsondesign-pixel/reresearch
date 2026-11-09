@@ -38,6 +38,8 @@
 	<array>
 		<string>Geist.ttf</string>
 		<string>GeistMono.ttf</string>
+		<string>Inter.ttf</string>
+		<string>SourceSerif4.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

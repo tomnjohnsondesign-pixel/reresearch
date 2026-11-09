@@ -17,6 +17,9 @@ struct Paper: Codable, Identifiable, Hashable {
     var caveat: String?
     var takeaway: String?
     var numbers: [KeyNumber]?
+    var likeCount: Int?
+    var commentCount: Int?
+    var saveCount: Int?
     var tags: [String]
     var liked: Bool?
     var saved: Bool?
@@ -58,10 +61,13 @@ struct Keyword: Codable { var term: String; var weight: Double }
 struct ModelOption: Codable, Identifiable { var id: String; var label: String; var note: String }
 struct Defaults: Codable { var categories: [String]; var keywords: [Keyword]; var models: [ModelOption]; var openaiModels: [ModelOption] }
 struct PrivacyBlock: Codable { var type: String; var text: String; var items: [String] }
-enum FeedTab: String, CaseIterable { case foryou = "For you", latest = "Latest", saved = "Saved", queue = "Queue" }
+enum FeedTab: String, CaseIterable { case all = "All", saved = "Saved", queue = "Queue" }
 
 @MainActor @Observable
 final class ReaderStore {
+    let brand = BrandMotion()
+    var didPresentLaunch = false
+    private(set) var isFetching = false
     var papers: [Paper]
     let topicGroups: [TopicGroup] = ReaderStore.load("topics")
     let defaults: Defaults = ReaderStore.load("defaults")
@@ -88,7 +94,6 @@ final class ReaderStore {
     var welcomed = true
     var keyHints: [String: String] = [:]
     var toast: String?
-    var randomIndex: Int?
     private let persist: Bool
 
     init(persist: Bool = true) {
@@ -135,8 +140,7 @@ final class ReaderStore {
             if p.queued == true && !completed.contains(p.id) { return false }
             return tab == .saved ? saved.contains(p.id) : !hidden.contains(p.id)
         }
-        if tab == .latest { list.sort { $0.hoursAgo < $1.hoursAgo } }
-        if tab == .foryou { list.sort { ($0.score - (read.contains($0.id) ? 5 : 0)) > ($1.score - (read.contains($1.id) ? 5 : 0)) } }
+        if tab == .all { list.sort { ($0.score - (read.contains($0.id) ? 5 : 0)) > ($1.score - (read.contains($1.id) ? 5 : 0)) } }
         return topic.map { t in list.filter { $0.topic == t } } ?? list
     }
     func message(_ text: String) {
@@ -144,11 +148,16 @@ final class ReaderStore {
         Task { try? await Task.sleep(for: .seconds(3)); if toast == text { toast = nil } }
     }
     func fetch() async {
-        try? await Task.sleep(for: .seconds(1))
-        message("No new papers since the last fetch. Nothing left to write up.")
+        guard !isFetching else { return }
+        isFetching = true
+        brand.beginRefresh()
+        defer { isFetching = false; brand.endRefresh(completed: !Task.isCancelled) }
+        try? await Task.sleep(for: .seconds(4.4))
     }
     func summarise(_ paper: Paper) {
+        guard !writing.contains(paper.id) else { return }
         writing.insert(paper.id)
+        brand.beginWork()
         Task {
             try? await Task.sleep(for: .seconds(2))
             if let i = papers.firstIndex(where: { $0.id == paper.id }) {
@@ -161,6 +170,7 @@ final class ReaderStore {
                 papers[i].takeaway = "Comparing multiple conditions helps distinguish stable patterns from measurement noise."
             }
             writing.remove(paper.id); completed.insert(paper.id)
+            brand.endWork()
         }
     }
     private struct LocalState: Codable {

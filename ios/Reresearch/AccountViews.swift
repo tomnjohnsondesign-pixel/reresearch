@@ -9,7 +9,7 @@ struct LoginView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Spacer()
-            Wordmark(size: 26)
+            BrandLogo(size: 64)
             Text("New papers, read as threads.").font(Design.font(14)).foregroundStyle(Design.muted).padding(.top, 4)
             Text("Pick your fields and how much background you have. Each morning the best new research is summarised into short, factual threads to read on your phone, using your own AI key.").font(Design.font(14)).lineSpacing(3).padding(.top, 12)
             if sent {
@@ -82,7 +82,7 @@ struct PrivacyView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                Button(action: returnToFeed) { Wordmark() }.buttonStyle(.plain)
+                Button(action: returnToFeed) { BrandLogo() }.buttonStyle(.plain)
                 ForEach(Array(blocks.enumerated()), id: \.offset) { index, block in
                     switch block.type {
                     case "h1": Text(block.text).font(Design.font(24, .bold)).padding(.top, 20)

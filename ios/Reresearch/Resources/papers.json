@@ -3,17 +3,17 @@
     "slug": "model-checking",
     "category": "cs.AI",
     "title": "Self-verification improves the reliability of compact language models",
-    "headline": "Smaller language models catch more mistakes when they check their own work",
+    "headline": "Smaller language models catch more mistakes when they check their own work.",
     "authors": [
       "Anna Chen",
       "Daniel Morgan",
       "Priya Shah"
     ],
     "institutions": [
-      "University of Cambridge",
+      "Cambridge University",
       "University of Edinburgh"
     ],
-    "hook": "A separate verification step improved performance on reasoning tasks without increasing model size. The gains were strongest when the model checked individual steps rather than simply answering the question again.",
+    "hook": "A separate verification step improved performance on reasoning tasks without increasing model size. The gains were strongest when the model checked individual steps rather than simply answering that question again.",
     "context": "Smaller language models are cheaper to run, but can make confident mistakes on problems that require several steps. A way to catch those mistakes could make them more useful when computing resources are limited.",
     "approach": "The researchers compared direct answers, repeated answers and step-by-step verification across three reasoning benchmarks. The same model and questions were used in each condition.",
     "result": "Step-by-step verification raised average accuracy from 68% to 76%. It also required more computation, so the improvement came with a trade-off in response time.",
@@ -37,7 +37,10 @@
     "liked": true,
     "id": "model-checking",
     "hoursAgo": 3,
-    "score": 12
+    "score": 12,
+    "likeCount": 6,
+    "commentCount": 6,
+    "saveCount": 6
   },
   {
     "slug": "quantum-control",
@@ -74,7 +77,10 @@
     "saved": true,
     "id": "quantum-control",
     "hoursAgo": 6,
-    "score": 11
+    "score": 11,
+    "likeCount": 6,
+    "commentCount": 6,
+    "saveCount": 6
   },
   {
     "slug": "catalyst",
@@ -112,7 +118,10 @@
     "read": true,
     "id": "catalyst",
     "hoursAgo": 9,
-    "score": 10
+    "score": 10,
+    "likeCount": 6,
+    "commentCount": 6,
+    "saveCount": 6
   },
   {
     "slug": "cell-signalling",
@@ -142,7 +151,10 @@
     "saved": true,
     "id": "cell-signalling",
     "hoursAgo": 12,
-    "score": 9
+    "score": 9,
+    "likeCount": 6,
+    "commentCount": 6,
+    "saveCount": 6
   },
   {
     "slug": "fusion",
@@ -162,7 +174,10 @@
     "queued": true,
     "id": "fusion",
     "hoursAgo": 15,
-    "score": 8
+    "score": 8,
+    "likeCount": 6,
+    "commentCount": 6,
+    "saveCount": 6
   },
   {
     "slug": "vision",
@@ -184,7 +199,10 @@
     "failed": true,
     "id": "vision",
     "hoursAgo": 18,
-    "score": 7
+    "score": 7,
+    "likeCount": 6,
+    "commentCount": 6,
+    "saveCount": 6
   },
   {
     "slug": "materials",
@@ -204,6 +222,9 @@
     "queued": true,
     "id": "materials",
     "hoursAgo": 21,
-    "score": 6
+    "score": 6,
+    "likeCount": 6,
+    "commentCount": 6,
+    "saveCount": 6
   }
 ]

@@ -1,11 +1,16 @@
 import SwiftUI
+import UIKit
 
 @main
 struct ReresearchApp: App {
     @State private var store = ReaderStore()
     var body: some Scene {
         WindowGroup {
-            RootView()
+            Group {
+                if ProcessInfo.processInfo.arguments.contains("--brand-study") { BrandStudyView() }
+                else if ProcessInfo.processInfo.arguments.contains("--post-study") { PostStudyView() }
+                else { RootView() }
+            }
                 .environment(store)
                 .font(Design.font(14))
                 .foregroundStyle(Design.foreground)
@@ -86,35 +91,223 @@ enum MainTab: String, CaseIterable {
 }
 
 struct MainShell: View {
+    @Environment(ReaderStore.self) private var store
     @Binding var selection: MainTab
-    @State private var feedSort: FeedTab = .foryou
-    @State private var sheet: ShellSheet?
-    private let navigationInset: CGFloat = 20
-    private enum ShellSheet: String, Identifiable { case menu, search; var id: String { rawValue } }
+    @State private var menuProgress: CGFloat = 0
+    @State private var menuInteraction: MenuInteraction = .idle
+    @State private var menuAnimationRevision = 0
+    @State private var searchPresented = false
+    @State private var launchProgress = 0.0
+    @State private var launchFinished = false
+    @State private var launchStarted = false
+    @State private var chrome = ReaderChromeMotion()
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private let navigationInset: CGFloat = 24
+    private enum MenuInteraction: Equatable { case idle, dragging(origin: CGFloat), settling }
+    private var pageInteractive: Bool { launchFinished && menuProgress == 0 && menuInteraction == .idle }
+    private var menuInteractive: Bool { launchFinished && menuProgress == 1 && menuInteraction == .idle }
+    private var topChromeHeight: CGFloat { 56 + (selection == .feed ? 52 : selection == .settings ? 0 : 44) }
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Button { sheet = .menu } label: { MenuGlyph().frame(width: 24, height: 24).frame(width: 44, height: 48) }.accessibilityLabel("Menu")
-                Spacer()
-                Button { sheet = .search } label: { Image(systemName: "magnifyingglass").font(.system(size: 24, weight: .regular)).frame(width: 44, height: 48) }.accessibilityLabel("Search")
+        GeometryReader { geometry in
+            let top = geometry.safeAreaInsets.top
+            let height = geometry.size.height + top + geometry.safeAreaInsets.bottom
+            let reveal = min(geometry.size.width * 0.78, 320)
+            ZStack(alignment: .topLeading) {
+                Design.background
+                AppMenu { setMenuOpen(false) }
+                    .padding(.top, top + 20)
+                    .frame(width: reveal, height: height, alignment: .topLeading)
+                    .allowsHitTesting(menuInteractive).accessibilityHidden(!menuInteractive)
+                BrandArrival(progress: launchProgress, isComplete: launchFinished,
+                             size: CGSize(width: geometry.size.width, height: height),
+                             safeTop: top, motion: store.brand,
+                             chrome: chrome) {
+                    mainPage
+                    .allowsHitTesting(pageInteractive)
+                    .padding(.top, top)
+                    .frame(width: geometry.size.width, height: height)
+                    .background(Design.background)
+                    .overlay(alignment: .bottom) {
+                        FloatingNavigation(selection: $selection)
+                            .padding([.horizontal, .bottom], navigationInset)
+                            .allowsHitTesting(pageInteractive).accessibilityHidden(!pageInteractive)
+                            .modifier(ReaderTrayTranslation(chrome: chrome))
+                    }
+                    .overlay {
+                        Button { setMenuOpen(false) } label: {
+                            Rectangle().fill(.white.opacity(0.001)).contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain).accessibilityLabel("Close menu")
+                        .opacity(menuProgress > 0 ? 1 : 0)
+                        .allowsHitTesting(menuInteractive).accessibilityHidden(!menuInteractive)
+                    }
+                }
+                    .clipShape(RoundedRectangle(cornerRadius: 56, style: .continuous))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 56, style: .continuous)
+                            .strokeBorder(Color(white: 0.91), lineWidth: 1)
+                            .opacity(menuProgress).allowsHitTesting(false)
+                    }
+                    .background {
+                        RoundedRectangle(cornerRadius: 56, style: .continuous)
+                            .fill(Design.background)
+                            .shadow(color: .black.opacity(0.09 * menuProgress), radius: 24, x: -6, y: 10)
+                            .shadow(color: .black.opacity(0.055 * menuProgress), radius: 5, x: -2, y: 2)
+                    }
+                    .offset(x: reveal * menuProgress)
             }
-            .overlay { Wordmark(size: 23).allowsHitTesting(false) }
-            .foregroundStyle(Design.foreground)
-            .padding(.horizontal, 12).frame(height: 56)
-            if selection == .settings { SettingsView(showHeader: false) }
-            else { FeedView(mode: selection, feedSort: $feedSort).id(selection) }
+            .frame(width: geometry.size.width, height: height)
+            .offset(y: -top)
+            .gesture(MenuPanGesture(canBegin: launchFinished && menuInteraction != .settling,
+                                    excludes: { point in
+                                        selection == .feed && menuProgress == 0 && chrome.horizontalContentFrame.contains(point)
+                                    }) { phase, translation, velocity in
+                switch phase {
+                case .began:
+                    revealChrome()
+                    menuAnimationRevision += 1
+                    menuInteraction = .dragging(origin: menuProgress)
+                case .changed:
+                    guard case .dragging(let origin) = menuInteraction else { return }
+                    menuProgress = min(1, max(0, origin + translation / reveal))
+                case .ended:
+                    guard case .dragging(let origin) = menuInteraction else { return }
+                    let projected = origin + (translation + velocity * 0.18) / reveal
+                    setMenuOpen(projected > 0.5)
+                case .cancelled, .failed:
+                    guard case .dragging = menuInteraction else { return }
+                    setMenuOpen(menuProgress > 0.5)
+                default: break
+                }
+            })
         }
         .background(Design.background)
-        .overlay(alignment: .bottom) {
-            FloatingNavigation(selection: $selection)
-                .padding([.horizontal, .bottom], navigationInset)
-        }
-        .ignoresSafeArea(.container, edges: .bottom)
-        .sheet(item: $sheet) { item in
-            switch item {
-            case .menu: AppMenu { sheet = nil }.presentationDetents([.height(300)]).presentationDragIndicator(.visible)
-            case .search: PaperSearchView().presentationDetents([.large]).presentationDragIndicator(.visible)
+        .task {
+            guard !launchStarted else { return }
+            launchStarted = true
+            let shouldPlay = !store.didPresentLaunch
+            store.didPresentLaunch = true
+            store.brand.rest(as: .orb)
+            if !shouldPlay || reduceMotion || ProcessInfo.processInfo.arguments.contains("--skip-intro") {
+                launchProgress = 1
+                launchFinished = true
+                return
             }
+            do { try await Task.sleep(for: .seconds(0.65)) }
+            catch { return }
+            withAnimation(.linear(duration: 2.9), completionCriteria: .removed) {
+                launchProgress = 1
+            } completion: {
+                launchFinished = true
+            }
+        }
+        .sheet(isPresented: $searchPresented) {
+            PaperSearchView().presentationDetents([.large]).presentationDragIndicator(.visible)
+        }
+        .accessibilityAction(.escape) { setMenuOpen(false) }
+        .sensoryFeedback(.success, trigger: store.brand.refreshCompletions)
+        .onChange(of: selection) { _, value in
+            revealChrome()
+            if value == .settings { store.brand.selectPalette(.all) }
+        }
+        .onChange(of: store.isFetching) { _, fetching in if fetching { revealChrome() } }
+    }
+    private func revealChrome() {
+        var transaction = Transaction(animation: nil)
+        transaction.disablesAnimations = true
+        withTransaction(transaction) { chrome.reveal() }
+    }
+    private func handleFeedScroll(_ old: FeedScrollSample, _ new: FeedScrollSample) {
+        var transaction = Transaction(animation: nil)
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            chrome.observe(position: new.offset, maximum: new.maximumOffset,
+                           height: topChromeHeight,
+                           enabled: launchFinished && menuProgress == 0 && !store.isFetching
+                                    && abs(new.maximumOffset - old.maximumOffset) < 1,
+                           viewportHeight: new.viewportHeight, contentHeight: new.contentHeight)
+        }
+    }
+    private func setMenuOpen(_ open: Bool) {
+        menuAnimationRevision += 1
+        let revision = menuAnimationRevision
+        if reduceMotion {
+            menuProgress = open ? 1 : 0
+            menuInteraction = .idle
+            return
+        }
+        menuInteraction = .settling
+        withAnimation(.spring(response: 0.34, dampingFraction: 1), completionCriteria: .removed) {
+            menuProgress = open ? 1 : 0
+        } completion: {
+            if revision == menuAnimationRevision { menuInteraction = .idle }
+        }
+    }
+    private var mainPage: some View {
+        ZStack(alignment: .top) {
+            if selection == .settings { SettingsView(showHeader: false).padding(.top, 56) }
+            else {
+                FeedView(mode: selection, chrome: chrome, onScrollChange: handleFeedScroll).id(selection)
+            }
+            HStack {
+                Button { setMenuOpen(true) } label: { MenuGlyph().frame(width: 24, height: 24).frame(width: 44, height: 48) }.accessibilityLabel("Menu")
+                Spacer()
+                Button { searchPresented = true } label: { Image(systemName: "magnifyingglass").font(.system(size: 21, weight: .regular)).frame(width: 44, height: 48) }.accessibilityLabel("Search")
+            }
+            .foregroundStyle(Design.foreground)
+            .padding(.horizontal, Design.pageInset - 12).frame(height: 56)
+            .background(Design.background)
+            .modifier(ReaderHeaderTranslation(chrome: chrome))
+        }
+        .accessibilityHidden(!pageInteractive)
+    }
+}
+
+// A horizontal pan must win over paper links, while vertical pans remain
+// available to the feed. Window coordinates stay stable as the page moves.
+private struct MenuPanGesture: UIGestureRecognizerRepresentable {
+    var canBegin: Bool
+    var excludes: (CGPoint) -> Bool = { _ in false }
+    var action: (UIGestureRecognizer.State, CGFloat, CGFloat) -> Void
+
+    func makeCoordinator(converter: CoordinateSpaceConverter) -> Coordinator { Coordinator() }
+    func makeUIGestureRecognizer(context: Context) -> UIPanGestureRecognizer {
+        let pan = UIPanGestureRecognizer()
+        pan.maximumNumberOfTouches = 1
+        pan.cancelsTouchesInView = true
+        context.coordinator.canBegin = canBegin
+        context.coordinator.excludes = excludes
+        pan.delegate = context.coordinator
+        return pan
+    }
+    func updateUIGestureRecognizer(_ recognizer: UIPanGestureRecognizer, context: Context) {
+        context.coordinator.canBegin = canBegin
+        context.coordinator.excludes = excludes
+    }
+    func handleUIGestureRecognizerAction(_ recognizer: UIPanGestureRecognizer, context: Context) {
+        let window = recognizer.view?.window
+        action(recognizer.state, recognizer.translation(in: window).x, recognizer.velocity(in: window).x)
+    }
+    final class Coordinator: NSObject, UIGestureRecognizerDelegate {
+        var canBegin = true
+        var excludes: (CGPoint) -> Bool = { _ in false }
+        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+            if excludes(touch.location(in: touch.view?.window)) { return false }
+            // Horizontal content, such as the topic strip, owns its swipe.
+            var ancestor = touch.view
+            while let view = ancestor {
+                if let scroll = view as? UIScrollView,
+                   scroll.isScrollEnabled && scroll.contentSize.width > scroll.bounds.width + 1 {
+                    return false
+                }
+                ancestor = view.superview
+            }
+            return true
+        }
+        func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+            guard canBegin, let pan = gestureRecognizer as? UIPanGestureRecognizer else { return false }
+            let velocity = pan.velocity(in: pan.view?.window)
+            return abs(velocity.x) > abs(velocity.y) * 1.3
         }
     }
 }
@@ -151,20 +344,34 @@ struct FloatingNavigation: View {
                 } label: {
                     trayIcon(tab, selected: selection == tab)
                         .foregroundStyle(Design.foreground)
-                        .frame(maxWidth: .infinity).frame(height: 68)
+                        .frame(maxWidth: .infinity).frame(height: 56)
                         .background {
                             if selection == tab { selectionSurface.matchedGeometryEffect(id: "selection", in: selectionAnimation) }
                         }.contentShape(Capsule())
                 }.buttonStyle(.plain).accessibilityLabel(tab.rawValue).accessibilityAddTraits(selection == tab ? .isSelected : [])
             }
-        }.padding(4).frame(height: 76)
+        }.padding(4).frame(height: 64)
     }
     @ViewBuilder private func trayIcon(_ tab: MainTab, selected: Bool) -> some View {
-        switch tab {
-        case .feed: MinimalTrayIcon(kind: .home, selected: selected).frame(width: 28, height: 28)
-        case .settings: MinimalTrayIcon(kind: .person, selected: selected).frame(width: 28, height: 28)
-        default: Image(systemName: selected ? tab.selectedSymbol : tab.symbol).font(.system(size: 24, weight: .regular))
+        // Optical sizes vary by silhouette; every outline uses the same
+        // point-based stroke, independent of its drawing dimensions.
+        Group {
+            switch tab {
+            case .feed:
+                MinimalTrayIcon(kind: .home, selected: selected)
+                    .frame(width: 27, height: 27).offset(y: -0.35)
+            case .saved:
+                MinimalTrayIcon(kind: .bookmark, selected: selected)
+                    .frame(width: 28, height: 28)
+            case .queue:
+                MinimalTrayIcon(kind: .queue, selected: selected)
+                    .frame(width: 28, height: 28)
+            case .settings:
+                MinimalTrayIcon(kind: .person, selected: selected)
+                    .frame(width: 28, height: 26)
+            }
         }
+        .frame(width: 32, height: 32)
     }
     private var selectionSurface: some View {
         Capsule().fill(.regularMaterial)
@@ -173,14 +380,15 @@ struct FloatingNavigation: View {
 }
 
 private struct MinimalTrayIcon: View {
-    enum Kind { case home, person }
+    enum Kind { case home, bookmark, queue, person }
     var kind: Kind
     var selected: Bool
     var body: some View {
         Canvas { context, size in
-            let scale = size.width / 24
-            func point(_ x: CGFloat, _ y: CGFloat) -> CGPoint { CGPoint(x: x * scale, y: y * scale) }
-            let stroke = StrokeStyle(lineWidth: 1.75 * scale, lineCap: .round, lineJoin: .round)
+            let scaleX = size.width / 24
+            let scaleY = size.height / 24
+            func point(_ x: CGFloat, _ y: CGFloat) -> CGPoint { CGPoint(x: x * scaleX, y: y * scaleY) }
+            let stroke = StrokeStyle(lineWidth: 1.65, lineCap: .round, lineJoin: .round)
             switch kind {
             case .home:
                 var house = Path()
@@ -196,20 +404,46 @@ private struct MinimalTrayIcon: View {
                 house.addCurve(to: point(4.25, 8.8), control1: point(3, 10.4), control2: point(3.4, 9.5))
                 house.closeSubpath()
                 if selected { context.fill(house, with: .foreground) }
-                else { context.stroke(house, with: .foreground, style: stroke) }
+                context.stroke(house, with: .foreground, style: stroke)
+            case .bookmark:
+                var bookmark = Path()
+                bookmark.move(to: point(6.5, 2.5))
+                bookmark.addLine(to: point(17.5, 2.5))
+                bookmark.addQuadCurve(to: point(19, 4), control: point(19, 2.5))
+                bookmark.addLine(to: point(19, 21.5))
+                bookmark.addLine(to: point(12, 17))
+                bookmark.addLine(to: point(5, 21.5))
+                bookmark.addLine(to: point(5, 4))
+                bookmark.addQuadCurve(to: point(6.5, 2.5), control: point(5, 2.5))
+                bookmark.closeSubpath()
+                if selected { context.fill(bookmark, with: .foreground) }
+                context.stroke(bookmark, with: .foreground, style: stroke)
+            case .queue:
+                var stack = Path()
+                stack.move(to: point(8, 1.5)); stack.addLine(to: point(16, 1.5))
+                stack.move(to: point(6, 4.5)); stack.addLine(to: point(18, 4.5))
+                context.stroke(stack, with: .foreground, style: stroke)
+                let front = Path(roundedRect: CGRect(x: 4 * scaleX, y: 7.5 * scaleY, width: 16 * scaleX, height: 14.5 * scaleY), cornerRadius: 2 * scaleX)
+                if selected { context.fill(front, with: .foreground) }
+                context.stroke(front, with: .foreground, style: stroke)
             case .person:
-                let head = Path(ellipseIn: CGRect(x: 8.5 * scale, y: 2.5 * scale, width: 7 * scale, height: 7 * scale))
+                let headDiameter = 7 * min(scaleX, scaleY)
+                let head = Path(ellipseIn: CGRect(x: 12 * scaleX - headDiameter / 2, y: 6 * scaleY - headDiameter / 2, width: headDiameter, height: headDiameter))
                 var shoulders = Path()
-                shoulders.move(to: point(3.5, 21))
+                shoulders.move(to: point(3.5, 20))
                 shoulders.addCurve(to: point(12, 14), control1: point(4, 16.7), control2: point(7.5, 14))
-                shoulders.addCurve(to: point(20.5, 21), control1: point(16.5, 14), control2: point(20, 16.7))
+                shoulders.addCurve(to: point(20.5, 20), control1: point(16.5, 14), control2: point(20, 16.7))
+                shoulders.addQuadCurve(to: point(19, 21.5), control: point(20.65, 21.5))
+                shoulders.addLine(to: point(5, 21.5))
+                shoulders.addQuadCurve(to: point(3.5, 20), control: point(3.35, 21.5))
+                shoulders.closeSubpath()
                 if selected {
-                    shoulders.addLine(to: point(3.5, 21)); shoulders.closeSubpath()
                     context.fill(head, with: .foreground); context.fill(shoulders, with: .foreground)
-                } else {
-                    context.stroke(head, with: .foreground, style: stroke)
-                    context.stroke(shoulders, with: .foreground, style: stroke)
                 }
+                // Retain the same stroke in both states so filling does not shrink
+                // the silhouette or drop its rounded lower corners.
+                context.stroke(head, with: .foreground, style: stroke)
+                context.stroke(shoulders, with: .foreground, style: stroke)
             }
         }.accessibilityHidden(true)
     }
@@ -221,15 +455,14 @@ private struct AppMenu: View {
     @Environment(\.selectMainTab) private var selectTab
     @Environment(\.openPrivacy) private var openPrivacy
     var body: some View {
-        NavigationStack {
-            VStack(alignment: .leading, spacing: 22) {
-                Wordmark(size: 21).padding(.bottom, 6)
-                Button { close(); Task { await store.fetch() } } label: { Label("Fetch new papers", systemImage: "arrow.clockwise") }
-                Button { close(); selectTab(.settings) } label: { Label("Reading preferences", systemImage: "slider.horizontal.3") }
-                Button { close(); openPrivacy() } label: { Label("Privacy", systemImage: "hand.raised") }
-                Button { close(); store.signedIn = false } label: { Label("Sign out", systemImage: "rectangle.portrait.and.arrow.right") }
-            }.font(Design.font(16)).foregroundStyle(Design.foreground).frame(maxWidth: .infinity, alignment: .leading).padding(28)
-        }
+        VStack(alignment: .leading, spacing: 22) {
+            BrandLogo(size: 48).padding(.bottom, 6)
+            Button { close(); Task { await store.fetch() } } label: { Label("Fetch new papers", systemImage: "arrow.clockwise") }
+            Button { close(); selectTab(.settings) } label: { Label("Reading preferences", systemImage: "slider.horizontal.3") }
+            Button { close(); openPrivacy() } label: { Label("Privacy", systemImage: "hand.raised") }
+            Button { close(); store.signedIn = false } label: { Label("Sign out", systemImage: "rectangle.portrait.and.arrow.right") }
+        }.font(Design.font(16)).foregroundStyle(Design.foreground)
+            .buttonStyle(.plain).frame(maxWidth: .infinity, alignment: .leading).padding(28)
     }
 }
 

@@ -24,7 +24,7 @@ struct SettingsView: View {
     var body: some View {
         VStack(spacing: 0) {
             if showHeader { BackHeader(title: "Settings", fetching: true) }
-            else { HStack { Text("Settings").font(Design.font(22, .bold)); Spacer() }.padding(.horizontal, 16).frame(height: 48) }
+            else { HStack { Text("Settings").font(Design.font(22, .bold)); Spacer() }.padding(.horizontal, Design.pageInset).frame(height: 48) }
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(spacing: 0) {
@@ -32,7 +32,7 @@ struct SettingsView: View {
                             Text("New here? It only takes a minute.").font(Design.font(13.5))
                             Spacer(minLength: 8)
                             Button("Show me around") { tour = 0 }.buttonStyle(WebButtonStyle(compact: true))
-                        }.padding(.horizontal, 16).padding(.vertical, 12)
+                        }.padding(.horizontal, Design.pageInset).padding(.vertical, 12)
                         Rule()
                         account
                         keys.id("keys")
@@ -68,7 +68,7 @@ struct SettingsView: View {
             }
             Spacer()
             Button("Sign out") { store.signedIn = false }.buttonStyle(WebButtonStyle(compact: true))
-        }.padding(16).frame(maxWidth: .infinity)
+        }.padding(.horizontal, Design.pageInset).padding(.vertical, 16).frame(maxWidth: .infinity)
             .overlay(alignment: .bottom) { Rule() }
     }
     private var keys: some View {
@@ -107,7 +107,7 @@ struct SettingsView: View {
             HStack(spacing: 8) {
                 WebField(placeholder: "arXiv link or DOI", text: $paperInput)
                 Button("Add") {
-                    if !paperInput.isEmpty { addedMessage = "Added 1 paper. Writing now; it'll appear at the top of For you in a minute or two."; paperInput = "" }
+                    if !paperInput.isEmpty { addedMessage = "Added 1 paper. Writing now; it'll appear at the top of your feed in a minute or two."; paperInput = "" }
                 }.buttonStyle(WebButtonStyle(primary: true))
             }.padding(.top, 12)
             if let addedMessage { Text(addedMessage).font(Design.font(13)).foregroundStyle(Design.accent).padding(.top, 8) }
@@ -208,7 +208,7 @@ struct SettingsView: View {
             Text(title).font(Design.font(15, .semibold))
             if let description { hint(description) }
             content()
-        }.frame(maxWidth: .infinity, alignment: .leading).padding(16).overlay(alignment: .bottom) { Rule() }
+        }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, Design.pageInset).padding(.vertical, 16).overlay(alignment: .bottom) { Rule() }
             .overlay {
                 let spots = ["Your API keys": "keys", "Reading level": "level", "Topics": "topics", "Interests": "interests", "Writing threads": "writing", "Fetch now": "fetch"]
                 if let tour, spots[title] == steps[tour].spot { RoundedRectangle(cornerRadius: 12).strokeBorder(Design.accent, lineWidth: 2).allowsHitTesting(false) }
