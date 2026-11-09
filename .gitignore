@@ -43,3 +43,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local native builds and per-machine Xcode state
+ios/DerivedData/
+ios/.build/
+ios/.swiftpm/
+ios/.xcodebuildmcp/
+**/xcuserdata/
+*.xcuserstate

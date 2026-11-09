@@ -1,0 +1,32 @@
+[
+  {
+    "spot": "keys",
+    "title": "1. Add one AI key",
+    "body": "This is the only thing you have to add. Paste a key from Anthropic, OpenAI or OpenRouter; the links show where to get one. You pay them directly. Papers come from free sources, so they need no key."
+  },
+  {
+    "spot": "level",
+    "title": "2. Set your reading level",
+    "body": "Drag the slider from Crayons to Referee #2. It sets how much background threads assume. Going back to a level you've already read costs nothing."
+  },
+  {
+    "spot": "topics",
+    "title": "3. Tick your topics",
+    "body": "Open a group and tick the fields you want. Each morning, and whenever you fetch, new papers in these are collected and the write-ups take turns across them."
+  },
+  {
+    "spot": "interests",
+    "title": "4. Fine-tune with interests",
+    "body": "Optional. Terms here rank matching papers higher within your topics; a negative weight steers away. Likes and saves teach it the same way, so you can leave this alone."
+  },
+  {
+    "spot": "writing",
+    "title": "5. Choose how threads are written",
+    "body": "Optional. Pick the model and effort, and set a monthly budget. Writing stops for the month when it's reached."
+  },
+  {
+    "spot": "fetch",
+    "title": "6. Fetch your first papers",
+    "body": "Tap this any time to fetch new papers and write up the best few. Everything you change here saves by itself, so there's no Save button."
+  }
+]

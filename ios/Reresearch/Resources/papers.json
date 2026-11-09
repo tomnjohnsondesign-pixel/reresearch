@@ -1,0 +1,230 @@
+[
+  {
+    "slug": "model-checking",
+    "category": "cs.AI",
+    "title": "Self-verification improves the reliability of compact language models",
+    "headline": "Smaller language models catch more mistakes when they check their own work.",
+    "authors": [
+      "Anna Chen",
+      "Daniel Morgan",
+      "Priya Shah"
+    ],
+    "institutions": [
+      "Cambridge University",
+      "University of Edinburgh"
+    ],
+    "hook": "A separate verification step improved performance on reasoning tasks without increasing model size. The gains were strongest when the model checked individual steps rather than simply answering that question again.",
+    "context": "Smaller language models are cheaper to run, but can make confident mistakes on problems that require several steps. A way to catch those mistakes could make them more useful when computing resources are limited.",
+    "approach": "The researchers compared direct answers, repeated answers and step-by-step verification across three reasoning benchmarks. The same model and questions were used in each condition.",
+    "result": "Step-by-step verification raised average accuracy from 68% to 76%. It also required more computation, so the improvement came with a trade-off in response time.",
+    "caveat": "The evaluation used a limited collection of reasoning tasks. It does not establish that the same improvement would hold for open-ended questions or specialist knowledge.",
+    "takeaway": "Checking intermediate steps may be a useful way to improve a compact model when a slightly slower answer is acceptable.",
+    "numbers": [
+      {
+        "value": "+8 pp",
+        "label": "accuracy"
+      },
+      {
+        "value": "3",
+        "label": "benchmarks"
+      }
+    ],
+    "tags": [
+      "language models",
+      "reasoning",
+      "evaluation"
+    ],
+    "liked": true,
+    "id": "model-checking",
+    "hoursAgo": 3,
+    "score": 12,
+    "likeCount": 6,
+    "commentCount": 6,
+    "saveCount": 6
+  },
+  {
+    "slug": "quantum-control",
+    "category": "quant-ph",
+    "title": "Adaptive calibration reduces measurement error in a superconducting quantum processor",
+    "headline": "A calibration routine helps quantum measurements stay reliable for longer",
+    "authors": [
+      "James Wilson",
+      "Sofia Rossi"
+    ],
+    "institutions": [
+      "University of Oxford"
+    ],
+    "hook": "Quantum hardware drifts as it runs. An adaptive calibration procedure reduced measurement errors by updating the readout settings as conditions changed.",
+    "context": "A quantum measurement can be wrong even when the computation before it went as planned. Changes in the hardware make calibration an ongoing task.",
+    "approach": "The team compared fixed readout settings with a procedure that periodically adjusted them using a small set of reference measurements.",
+    "result": "The adaptive procedure kept the average readout error below 2% during an eight-hour run. Fixed settings became less reliable as the hardware drifted.",
+    "caveat": "The experiment covered one processor and a limited range of operating conditions. Calibration overhead and performance on other devices still need to be assessed.",
+    "takeaway": "Keeping measurement settings up to date could be as important as choosing good settings at the start of an experiment.",
+    "numbers": [
+      {
+        "value": "<2%",
+        "label": "readout error"
+      },
+      {
+        "value": "8 h",
+        "label": "continuous operation"
+      }
+    ],
+    "tags": [
+      "quantum computing",
+      "calibration"
+    ],
+    "saved": true,
+    "id": "quantum-control",
+    "hoursAgo": 6,
+    "score": 11,
+    "likeCount": 6,
+    "commentCount": 6,
+    "saveCount": 6
+  },
+  {
+    "slug": "catalyst",
+    "category": "openalex:1602",
+    "title": "Tracking active sites during low-temperature catalytic carbon dioxide conversion",
+    "headline": "Watching a catalyst at work reveals which sites drive the reaction",
+    "authors": [
+      "Maya Patel",
+      "Lukas Weber",
+      "Elena Garcia",
+      "Thomas Reed"
+    ],
+    "institutions": [
+      "Imperial College London",
+      "ETH Zürich",
+      "University of Manchester"
+    ],
+    "hook": "Measurements taken while the reaction was running linked changes at the catalyst surface to its performance. The result helps separate active sites from structures that merely happen to be present.",
+    "context": "Catalysts can change shape and composition while they work. Studying them only before and after a reaction can miss the structures that matter most.",
+    "approach": "The study combined time-resolved spectroscopy with reaction-rate measurements across five temperatures and a reference catalyst.",
+    "result": "A particular surface configuration appeared alongside higher conversion rates. Its abundance changed reversibly as the temperature was adjusted.",
+    "caveat": "The association does not by itself prove that the observed configuration causes the higher rate. The experiment also used conditions simpler than an industrial reactor.",
+    "takeaway": "Measuring a catalyst during operation provides a clearer starting point for deciding which features to improve.",
+    "numbers": [
+      {
+        "value": "5",
+        "label": "temperatures tested"
+      }
+    ],
+    "tags": [
+      "catalysis",
+      "carbon dioxide",
+      "spectroscopy"
+    ],
+    "read": true,
+    "id": "catalyst",
+    "hoursAgo": 9,
+    "score": 10,
+    "likeCount": 6,
+    "commentCount": 6,
+    "saveCount": 6
+  },
+  {
+    "slug": "cell-signalling",
+    "category": "q-bio.CB",
+    "title": "Time-resolved imaging reveals coordinated signalling during epithelial repair",
+    "headline": "Cells coordinate repairs through waves of chemical signals",
+    "authors": [
+      "Oliver Evans",
+      "Hannah Kim",
+      "Amira Hassan"
+    ],
+    "institutions": [
+      "University of Edinburgh"
+    ],
+    "hook": "Repeated imaging showed signals spreading between neighbouring cells as a damaged layer closed. Following the sequence revealed coordination that a single snapshot would have missed.",
+    "context": "Tissue repair involves many cells changing their behaviour together. Understanding when and where they communicate can help explain how that coordination emerges.",
+    "approach": "Researchers followed fluorescent markers in a cultured cell layer after a small, controlled injury, then compared signalling patterns with cell movement.",
+    "result": "Waves of activity preceded coordinated movement towards the damaged area. Interrupting one signalling pathway changed both the waves and the movement pattern.",
+    "caveat": "Cultured cells do not reproduce the full complexity of living tissue. The findings describe this experimental system rather than a treatment or a clinical outcome.",
+    "takeaway": "The timing of a signal can be as informative as its location when studying how groups of cells respond to damage.",
+    "numbers": [],
+    "tags": [
+      "cell biology",
+      "signalling",
+      "tissue repair"
+    ],
+    "saved": true,
+    "id": "cell-signalling",
+    "hoursAgo": 12,
+    "score": 9,
+    "likeCount": 6,
+    "commentCount": 6,
+    "saveCount": 6
+  },
+  {
+    "slug": "fusion",
+    "category": "physics.plasm-ph",
+    "title": "Predicting the onset of plasma instabilities from sparse magnetic measurements",
+    "authors": [
+      "Sophie Martin",
+      "Alexander Brooks"
+    ],
+    "institutions": [
+      "UKAEA"
+    ],
+    "tags": [
+      "fusion energy",
+      "plasma stability"
+    ],
+    "queued": true,
+    "id": "fusion",
+    "hoursAgo": 15,
+    "score": 8,
+    "likeCount": 6,
+    "commentCount": 6,
+    "saveCount": 6
+  },
+  {
+    "slug": "vision",
+    "category": "cs.CV",
+    "title": "Measuring visual robustness beyond familiar image benchmarks",
+    "authors": [
+      "Isabel Santos",
+      "Michael Turner",
+      "Yuki Tanaka"
+    ],
+    "institutions": [
+      "University of Bristol"
+    ],
+    "tags": [
+      "computer vision",
+      "robustness"
+    ],
+    "queued": true,
+    "failed": true,
+    "id": "vision",
+    "hoursAgo": 18,
+    "score": 7,
+    "likeCount": 6,
+    "commentCount": 6,
+    "saveCount": 6
+  },
+  {
+    "slug": "materials",
+    "category": "cond-mat.supr-con",
+    "title": "Pressure-dependent transport in layered superconducting materials",
+    "authors": [
+      "Nina Fischer",
+      "Benjamin Clarke"
+    ],
+    "institutions": [
+      "University of Birmingham"
+    ],
+    "tags": [
+      "superconductivity",
+      "materials"
+    ],
+    "queued": true,
+    "id": "materials",
+    "hoursAgo": 21,
+    "score": 6,
+    "likeCount": 6,
+    "commentCount": 6,
+    "saveCount": 6
+  }
+]

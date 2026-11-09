@@ -1,0 +1,107 @@
+[
+  {
+    "type": "h1",
+    "text": "Privacy",
+    "items": []
+  },
+  {
+    "type": "p",
+    "text": "Last updated 8 November 2026",
+    "items": []
+  },
+  {
+    "type": "p",
+    "text": "reresearch is run by Mike Battye as a personal project. This page says what it stores about you, why, and how to get rid of it. Questions or requests: privacy@reresearch.app.",
+    "items": []
+  },
+  {
+    "type": "h2",
+    "text": "What's stored",
+    "items": []
+  },
+  {
+    "type": "ul",
+    "text": "Your email address, to sign you in and send you links. If you ask for access, it's kept on the waitlist. There are no passwords.Your AI key, if you add one. It's encrypted, used only to write your threads, and never shown again. Only its last four characters are kept readable, so you can tell which key is saved.What you do in the app: your topics, interests and settings, what you like, save, hide and read, what your ranking has learned, and what your key has spent.Sign-in details: the IP address and browser your session started from, kept until the session ends (90 days at most).Rate-limiting records: your IP address or email against recent sign-in attempts, kept for about a day to stop abuse.",
+    "items": [
+      "Your email address, to sign you in and send you links. If you ask for access, it's kept on the waitlist. There are no passwords.",
+      "Your AI key, if you add one. It's encrypted, used only to write your threads, and never shown again. Only its last four characters are kept readable, so you can tell which key is saved.",
+      "What you do in the app: your topics, interests and settings, what you like, save, hide and read, what your ranking has learned, and what your key has spent.",
+      "Sign-in details: the IP address and browser your session started from, kept until the session ends (90 days at most).",
+      "Rate-limiting records: your IP address or email against recent sign-in attempts, kept for about a day to stop abuse."
+    ]
+  },
+  {
+    "type": "h2",
+    "text": "Why, and the legal basis",
+    "items": []
+  },
+  {
+    "type": "p",
+    "text": "Your account data is needed to provide the service you signed up for (performing a contract). Security records and the waitlist are kept because there's a legitimate interest in preventing abuse and managing access. Your data is not sold, and it isn't used for advertising.",
+    "items": []
+  },
+  {
+    "type": "h2",
+    "text": "Who else handles it",
+    "items": []
+  },
+  {
+    "type": "ul",
+    "text": "Vercel hosts the app, Neon hosts the database, and Resend sends the emails. They process data on reresearch's behalf, and may do so outside the UK.Your AI provider (Anthropic, OpenAI or OpenRouter, whichever you choose) receives each paper and the writing instructions, under your own account and its own terms. Your email isn't included.Research databases (arXiv, bioRxiv, OpenAlex, INSPIRE and Semantic Scholar) receive requests for papers. Semantic Scholar also receives the ids of papers you've liked, saved or hidden, to suggest similar ones. None of these requests include your name or email.",
+    "items": [
+      "Vercel hosts the app, Neon hosts the database, and Resend sends the emails. They process data on reresearch's behalf, and may do so outside the UK.",
+      "Your AI provider (Anthropic, OpenAI or OpenRouter, whichever you choose) receives each paper and the writing instructions, under your own account and its own terms. Your email isn't included.",
+      "Research databases (arXiv, bioRxiv, OpenAlex, INSPIRE and Semantic Scholar) receive requests for papers. Semantic Scholar also receives the ids of papers you've liked, saved or hidden, to suggest similar ones. None of these requests include your name or email."
+    ]
+  },
+  {
+    "type": "p",
+    "text": "Written threads are shared between readers at the same reading level. Other readers can't see who paid for one.",
+    "items": []
+  },
+  {
+    "type": "h2",
+    "text": "Cookies",
+    "items": []
+  },
+  {
+    "type": "p",
+    "text": "One essential cookie keeps you signed in. Your browser also remembers small conveniences, such as having seen the Settings tour. There are no advertising or analytics cookies, and no tracking.",
+    "items": []
+  },
+  {
+    "type": "h2",
+    "text": "How long it's kept, and deleting it",
+    "items": []
+  },
+  {
+    "type": "p",
+    "text": "Your data is kept until you delete your account: Settings → Your data → Delete my account. That immediately removes your email, key, sessions, settings and reading history. Threads your key paid for stay available to other readers, with no link to you. Deleted data can stay in database backups for a short time before it's overwritten.",
+    "items": []
+  },
+  {
+    "type": "p",
+    "text": "If you asked for access and don't have an account, your email stays on the waitlist until you're approved, or until you ask for it to be removed. A declined request is kept so you aren't asked about again.",
+    "items": []
+  },
+  {
+    "type": "h2",
+    "text": "Your rights",
+    "items": []
+  },
+  {
+    "type": "p",
+    "text": "Under UK data protection law you can ask for a copy of your data, have it corrected or deleted, restrict or object to its use, and take it elsewhere. Email privacy@reresearch.app to do any of these. If you're unhappy with the response, you can complain to the Information Commissioner's Office.",
+    "items": []
+  },
+  {
+    "type": "h2",
+    "text": "Open source",
+    "items": []
+  },
+  {
+    "type": "p",
+    "text": "You can read exactly how all of this works in the code.",
+    "items": []
+  }
+]
